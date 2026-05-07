@@ -6,7 +6,7 @@ import Dashboard from "./pages/Dashboard";
 import AdminDashboard from "./pages/AdminDashboard";
 
 export default function App() {
-    const { user, login, logout } = useAuth();
+    const { user, login, logout, authError } = useAuth();
     const profile = useUser(user);
 
     if (user === undefined) {
@@ -22,7 +22,7 @@ export default function App() {
             <Routes>
                 <Route
                     path="/"
-                    element={user ? <Navigate to="/dashboard" /> : <Landing onLogin={login} />}
+                    element={user ? <Navigate to="/dashboard" /> : <Landing onLogin={login} authError={authError} />}
                 />
                 <Route
                     path="/dashboard"

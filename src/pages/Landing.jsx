@@ -1,13 +1,24 @@
-export default function Landing({ onLogin }) {
+import { useState } from "react";
+
+export default function Landing({ onLogin, authError }) {
+    const [loading, setLoading] = useState(false);
+
+    const handleLogin = async () => {
+        setLoading(true);
+        await onLogin();
+        setLoading(false);
+    };
+
     return (
         <div className="min-h-screen bg-zinc-950 text-white flex flex-col">
             <nav className="px-8 py-5 flex items-center justify-between border-b border-zinc-800">
                 <span className="text-xl font-semibold tracking-tight text-white">Nexus API</span>
                 <button
-                    onClick={onLogin}
-                    className="px-5 py-2 text-sm bg-violet-600 hover:bg-violet-500 rounded-lg transition-colors"
+                    onClick={handleLogin}
+                    disabled={loading}
+                    className="px-5 py-2 text-sm bg-violet-600 hover:bg-violet-500 disabled:opacity-60 rounded-lg transition-colors"
                 >
-                    Sign in with Google
+                    {loading ? "Signing in..." : "Sign in with Google"}
                 </button>
             </nav>
 
@@ -22,12 +33,22 @@ export default function Landing({ onLogin }) {
                     Query the world's best LLMs through a clean API. No OpenAI keys, no billing. Just ship.
                 </p>
                 <button
-                    onClick={onLogin}
-                    className="flex items-center gap-3 px-7 py-3.5 bg-white text-zinc-900 font-medium rounded-xl hover:bg-zinc-100 transition-colors"
+                    onClick={handleLogin}
+                    disabled={loading}
+                    className="flex items-center gap-3 px-7 py-3.5 bg-white text-zinc-900 font-medium rounded-xl hover:bg-zinc-100 disabled:opacity-60 transition-colors"
                 >
-                    <img src="https://www.google.com/favicon.ico" alt="" className="w-5 h-5" />
-                    Continue with Google
+                    {loading ? (
+                        <div className="w-5 h-5 border-2 border-zinc-400 border-t-zinc-900 rounded-full animate-spin" />
+                    ) : (
+                        <img src="https://www.google.com/favicon.ico" alt="" className="w-5 h-5" />
+                    )}
+                    {loading ? "Opening sign-in..." : "Continue with Google"}
                 </button>
+                {authError && (
+                    <div className="mt-4 px-4 py-3 bg-red-900/30 border border-red-700/50 rounded-xl text-red-300 text-sm max-w-md">
+                        {authError}
+                    </div>
+                )}
 
                 <div className="mt-20 grid grid-cols-1 md:grid-cols-3 gap-6 max-w-3xl w-full text-left">
                     {[

@@ -31,6 +31,12 @@ export async function queryLLM(source, system_prompt, question) {
     return res.json();
 }
 
+export async function getJobStatus(jobId) {
+    const headers = await getHeaders();
+    const res = await fetch(`${BASE}/query/status/${jobId}`, { headers });
+    return res.json();
+}
+
 export async function adminGetUsers() {
     const headers = await getHeaders();
     const res = await fetch(`${BASE}/admin/users`, { headers });
